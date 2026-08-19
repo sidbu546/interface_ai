@@ -35,7 +35,7 @@ transcript becomes a typed capability with parameters, outputs, checkpoints and
 declared outcomes.
 
 **Replay** takes an artifact plus arguments and executes. It imports no model
-client; `grep -c anthropic understudy/replay.py` returns 0. That is the
+client. That is the
 production path.
 
 **The catalog** exposes artifacts as callable tools — Python tool definitions,

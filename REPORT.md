@@ -1,4 +1,4 @@
-# Understudy — design write-up
+# Understudy : design write-up
 
 A system that lets an LLM learn a back-office task once, turns that run into a
 typed capability, and executes it thereafter with no model in the decision loop.

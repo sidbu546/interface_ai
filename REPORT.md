@@ -73,7 +73,7 @@ That cost is the point — see §3.
 
 Pydantic v2, JSON-Schema-exportable, versioned `capability.id@version`. Shaped
 around one question: *what does a calling agent need in order to invoke this
-safely without reading the code?*
+safely ?*
 
 ```
 CapabilityArtifact

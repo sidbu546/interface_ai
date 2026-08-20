@@ -57,7 +57,8 @@ typed inputs, 6 typed outputs, 13 declared outcomes.
 Python 3.11+ (developed on 3.13).
 
 ```bash
-git clone <this repo> && cd interface
+git clone https://github.com/sidbu546/interface_ai.git
+cd interface_ai
 
 python3 -m venv .venv
 source .venv/bin/activate

@@ -1,0 +1,73 @@
+<html>
+<head>
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='legacy.css') }}">
+</head>
+<body bgcolor="#ffffff" topmargin="0" leftmargin="0" marginwidth="0" marginheight="0">
+
+<table width="100%" cellpadding="0" cellspacing="0" border="0" class="t1">
+<tr><td height="10"></td></tr>
+<tr>
+  <td>
+    &nbsp;&nbsp;<font face="Arial" size="3" color="{{ t.accent }}"><b>{{ t.title_overview }}</b></font>
+  </td>
+</tr>
+<tr><td height="6"></td></tr>
+
+<!--
+  Deliberate: the word "{{ t.col_balance }}" appears here in the summary line
+  AND again below as a column header. A locator that matches on visible text
+  alone is ambiguous; disambiguation has to come from role plus container.
+-->
+<tr>
+  <td>
+    &nbsp;&nbsp;<font face="Arial" size="2">Total {{ t.col_balance }}:
+    <b>${{ '%.2f'|format(total) }}</b></font>
+  </td>
+</tr>
+<tr><td height="12"></td></tr>
+
+<tr>
+<td>
+  <table width="96%" cellpadding="0" cellspacing="0" border="0" align="center" class="t5">
+  <tr>
+  <td>
+
+    <table width="100%" cellpadding="5" cellspacing="1" border="0" bgcolor="#b9b9b9" class="t6">
+    <tr bgcolor="#e4e4e4">
+      <td width="22%" class="c1"><font face="Arial" size="2"><b>{{ t.col_account }}</b></font></td>
+      <td width="28%" class="c1"><font face="Arial" size="2"><b>{{ t.col_type }}</b></font></td>
+      <td width="25%" align="right" class="c1"><font face="Arial" size="2"><b>{{ t.col_balance }}</b></font></td>
+      <td width="25%" align="right" class="c1"><font face="Arial" size="2"><b>{{ t.col_available }}</b></font></td>
+    </tr>
+    {% for a in accounts %}
+    <tr bgcolor="#ffffff">
+      <td class="c2">
+        <font face="Arial" size="2">
+          <a href="account.htm?id={{ a.account_id }}" class="a2">{{ a.account_id }}</a>
+        </font>
+      </td>
+      <td class="c2"><font face="Arial" size="2">{{ a.kind }}</font></td>
+      <td align="right" class="c2"><font face="Arial" size="2">${{ '%.2f'|format(a.balance) }}</font></td>
+      <td align="right" class="c2"><font face="Arial" size="2">${{ '%.2f'|format(a.available) }}</font></td>
+    </tr>
+    {% endfor %}
+    </table>
+
+  </td>
+  </tr>
+  </table>
+</td>
+</tr>
+
+<tr><td height="14"></td></tr>
+<tr>
+  <td>
+    &nbsp;&nbsp;<font face="Arial" size="1" color="#777777">
+      Select an {{ t.col_account|lower }} to view detail and posted activity.
+    </font>
+  </td>
+</tr>
+</table>
+
+</body>
+</html>

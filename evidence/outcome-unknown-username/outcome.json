@@ -1,0 +1,74 @@
+{
+  "status": "business_outcome",
+  "outcome_code": "unknown_username",
+  "step": "s2_enter_username",
+  "reason": "Unknown username: no account by that name exists at this institution, so the password was never the problem. Check the username before trying again.",
+  "expected": "the username entered at the pause to be an account this institution recognises (during 'Enter username')",
+  "observed": "the application said: 'That username was not recognised.' | detector 'unknown_username' matched | url=http://127.0.0.1:8099/meridian/login.htm | title='Meridian Credit Union - Online Servicing' | screen text: MERIDIAN CU / Online Servicing Sign On That username was not recognised. Meridian Credit Union \u00b7 Core Servicing 8.2.1 Test environment. No real account data. / Online Servicing Sign On / That username...",
+  "url": "http://127.0.0.1:8099/meridian/login.htm",
+  "frame_urls": [
+    "http://127.0.0.1:8099/meridian/login.htm"
+  ],
+  "nodes": [
+    {
+      "role": "LayoutTableCell",
+      "name": "MERIDIAN CU",
+      "frame": ""
+    },
+    {
+      "role": "LayoutTableCell",
+      "name": "Online Servicing Sign On That username was not recognised. Meridian Credit Union \u00b7 Core Servicing 8.2.1 Test environment. No real account data.",
+      "frame": ""
+    },
+    {
+      "role": "LayoutTableCell",
+      "name": "Online Servicing Sign On",
+      "frame": ""
+    },
+    {
+      "role": "LayoutTableCell",
+      "name": "That username was not recognised.",
+      "frame": ""
+    },
+    {
+      "role": "LayoutTableCell",
+      "name": "Meridian Credit Union \u00b7 Core Servicing 8.2.1 Test environment. No real account data.",
+      "frame": ""
+    },
+    {
+      "role": "LayoutTableCell",
+      "name": "That username was not recognised.",
+      "frame": ""
+    },
+    {
+      "role": "LayoutTableCell",
+      "name": "Username:",
+      "frame": ""
+    },
+    {
+      "role": "LayoutTableCell",
+      "name": "Password:",
+      "frame": ""
+    },
+    {
+      "role": "LayoutTableCell",
+      "name": "Log In",
+      "frame": ""
+    },
+    {
+      "role": "textbox",
+      "name": "",
+      "frame": ""
+    },
+    {
+      "role": "textbox",
+      "name": "",
+      "frame": ""
+    },
+    {
+      "role": "button",
+      "name": "Log In",
+      "frame": ""
+    }
+  ]
+}

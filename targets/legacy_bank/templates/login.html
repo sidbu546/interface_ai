@@ -1,0 +1,100 @@
+<html>
+<head>
+  <title>{{ t.institution }} - Online Servicing</title>
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='legacy.css') }}">
+</head>
+<body bgcolor="#ffffff">
+
+<table width="100%" cellpadding="0" cellspacing="0" border="0" class="t1">
+<tr>
+  <td bgcolor="{{ t.accent }}" height="46">
+    &nbsp;<font face="Arial" size="4" color="#ffffff"><b>{{ t.wordmark }}</b></font>
+  </td>
+</tr>
+<tr><td height="3" bgcolor="#c8c8c8"></td></tr>
+</table>
+
+<table width="100%" cellpadding="0" cellspacing="0" border="0">
+<tr>
+<td align="center" valign="top">
+
+  <table width="470" cellpadding="0" cellspacing="0" border="0" class="t2">
+  <tr><td height="26"></td></tr>
+  <tr>
+    <td>
+      <font face="Arial" size="3" color="{{ t.accent }}"><b>Online Servicing Sign On</b></font>
+    </td>
+  </tr>
+  <tr><td height="10"></td></tr>
+
+  {% if error %}
+  <tr>
+    <td>
+      <table width="100%" cellpadding="6" cellspacing="0" border="0" bgcolor="#fdf0ef" class="t3">
+      <tr>
+        <td class="c9">
+          <font face="Arial" size="2" color="#96231a"><b>{{ error }}</b></font>
+        </td>
+      </tr>
+      </table>
+    </td>
+  </tr>
+  <tr><td height="10"></td></tr>
+  {% endif %}
+
+  <tr>
+    <td>
+      <form method="post" action="login.htm">
+      <table cellpadding="4" cellspacing="0" border="0" class="t4">
+
+      <!--
+        Deliberate: the label text sits in a sibling table cell with no
+        <label for> and no aria-label, so these inputs have NO accessible
+        name. They can only be located by their spatial/table relationship
+        to the text on their left. This is the common case in real legacy
+        back-office software.
+      -->
+      <tr>
+        <td width="120" align="right" class="c2">
+          <font face="Arial" size="2">{{ t.label_username }}</font>
+        </td>
+        <td class="c3">
+          <input type="text" name="username" size="22" class="i1">
+        </td>
+      </tr>
+      <tr>
+        <td align="right" class="c2">
+          <font face="Arial" size="2">{{ t.label_password }}</font>
+        </td>
+        <td class="c3">
+          <input type="password" name="password" size="22" class="i1">
+        </td>
+      </tr>
+      <tr>
+        <td></td>
+        <td class="c3">
+          <input type="submit" value="{{ t.label_signin }}" class="b1">
+        </td>
+      </tr>
+      </table>
+      </form>
+    </td>
+  </tr>
+
+  <tr><td height="22"></td></tr>
+  <tr>
+    <td class="c8">
+      <font face="Arial" size="1" color="#777777">
+        {{ t.institution }} &middot; Core Servicing {{ t.product_version }}<br>
+        Test environment. No real account data.
+      </font>
+    </td>
+  </tr>
+  </table>
+
+</td>
+</tr>
+</table>
+
+</body>
+</html>

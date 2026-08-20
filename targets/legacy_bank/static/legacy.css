@@ -1,0 +1,67 @@
+/* Deliberately opaque class names. Nothing here is semantic, and nothing
+   is a stable automation hook -- which is the point. A locator strategy
+   built on these class names would be exactly the brittle thing this
+   project argues against. */
+
+body { margin: 0; padding: 0; background: #ffffff; }
+
+.t1, .t2, .t3, .t4, .t5, .t6 { border-collapse: collapse; }
+
+.c1 { font-family: Arial, Helvetica, sans-serif; font-size: 12px; }
+.c2 { font-family: Arial, Helvetica, sans-serif; font-size: 12px; }
+.c3 { font-family: Arial, Helvetica, sans-serif; font-size: 12px; }
+.c5 { padding-top: 4px; }
+.c6 { padding: 3px 0 3px 0; }
+.c7 { font-family: Arial, Helvetica, sans-serif; font-size: 10px; color: #444444; }
+.c8 { padding-top: 8px; border-top: 1px solid #dddddd; }
+.c9 { font-family: Arial, Helvetica, sans-serif; }
+
+.i1 {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 12px;
+  border: 1px solid #9a9a9a;
+  padding: 2px 3px;
+}
+.i2 {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 12px;
+  border: 1px solid #9a9a9a;
+}
+
+.b1 {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 12px;
+  padding: 3px 12px;
+  border: 1px solid #7a7a7a;
+  background: #e8e8e8;
+  cursor: pointer;
+}
+
+/* A div pretending to be a button. No role, no keyboard focus, no name in
+   the accessibility tree beyond its text content. */
+.fakebtn {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 12px;
+  display: inline-block;
+  padding: 5px 16px;
+  border: 1px solid #7a7a7a;
+  background: #dfdfdf;
+  cursor: pointer;
+  user-select: none;
+}
+.fakebtn:hover { background: #d2d2d2; }
+
+.a1 {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 12px;
+  color: #14406e;
+  text-decoration: none;
+}
+.a1:hover { text-decoration: underline; }
+
+.a2 {
+  font-family: Arial, Helvetica, sans-serif;
+  color: #14406e;
+}
+
+.t3 { border: 1px solid #e0b4ae; }

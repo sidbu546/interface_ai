@@ -1,0 +1,71 @@
+{
+  "status": "failed",
+  "step": "s5_open_transfer_funds",
+  "reason": "The application returned a server error.",
+  "expected": "the application to serve the page rather than an error (during 'Open Transfer Funds')",
+  "observed": "the application said: '500 Internal Server Error' | detector 'app_server_error' matched | url=http://127.0.0.1:8099/meridian/main.htm | title='Meridian Credit Union - Core Servicing' | screen text: 500 Internal Server Error",
+  "url": "http://127.0.0.1:8099/meridian/main.htm",
+  "frame_urls": [
+    "http://127.0.0.1:8099/meridian/main.htm",
+    "http://127.0.0.1:8099/meridian/nav.htm",
+    "http://127.0.0.1:8099/meridian/transfer.htm",
+    "http://127.0.0.1:8099/meridian/status.htm"
+  ],
+  "nodes": [
+    {
+      "role": "LayoutTableCell",
+      "name": "MERIDIAN CU",
+      "frame": "navframe"
+    },
+    {
+      "role": "LayoutTableCell",
+      "name": "SERVICING",
+      "frame": "navframe"
+    },
+    {
+      "role": "LayoutTableCell",
+      "name": "Accounts Overview",
+      "frame": "navframe"
+    },
+    {
+      "role": "LayoutTableCell",
+      "name": "Transfer Funds",
+      "frame": "navframe"
+    },
+    {
+      "role": "LayoutTableCell",
+      "name": "Log Out",
+      "frame": "navframe"
+    },
+    {
+      "role": "link",
+      "name": "Accounts Overview",
+      "frame": "navframe"
+    },
+    {
+      "role": "link",
+      "name": "Transfer Funds",
+      "frame": "navframe"
+    },
+    {
+      "role": "link",
+      "name": "Log Out",
+      "frame": "navframe"
+    },
+    {
+      "role": "heading",
+      "name": "500 Internal Server Error",
+      "frame": "contentframe"
+    },
+    {
+      "role": "LayoutTableCell",
+      "name": "Signed on as Jordan Smith (jsmith)",
+      "frame": "statusframe"
+    },
+    {
+      "role": "LayoutTableCell",
+      "name": "Meridian Credit Union \u00b7 Core Servicing 8.2.1",
+      "frame": "statusframe"
+    }
+  ]
+}

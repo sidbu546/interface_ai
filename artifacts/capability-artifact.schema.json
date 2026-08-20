@@ -1,0 +1,834 @@
+{
+  "$defs": {
+    "Action": {
+      "properties": {
+        "kind": {
+          "enum": [
+            "navigate",
+            "click",
+            "type",
+            "type_secret",
+            "select",
+            "read",
+            "assert",
+            "credential_entry",
+            "human_action"
+          ],
+          "title": "Kind",
+          "type": "string"
+        },
+        "url": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Url"
+        },
+        "text": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Text"
+        },
+        "value": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Value"
+        },
+        "param": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Param"
+        },
+        "secret_ref": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Secret Ref"
+        },
+        "submit_form": {
+          "default": false,
+          "title": "Submit Form",
+          "type": "boolean"
+        },
+        "instruction": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Instruction"
+        }
+      },
+      "required": [
+        "kind"
+      ],
+      "title": "Action",
+      "type": "object"
+    },
+    "AppProfile": {
+      "properties": {
+        "product": {
+          "title": "Product",
+          "type": "string"
+        },
+        "version_range": {
+          "default": "*",
+          "title": "Version Range",
+          "type": "string"
+        },
+        "surface_kind": {
+          "default": "legacy_web",
+          "enum": [
+            "web",
+            "legacy_web",
+            "desktop"
+          ],
+          "title": "Surface Kind",
+          "type": "string"
+        }
+      },
+      "required": [
+        "product"
+      ],
+      "title": "AppProfile",
+      "type": "object"
+    },
+    "Approval": {
+      "enum": [
+        "draft",
+        "in_review",
+        "approved"
+      ],
+      "title": "Approval",
+      "type": "string"
+    },
+    "CapabilityMeta": {
+      "properties": {
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "summary": {
+          "title": "Summary",
+          "type": "string"
+        },
+        "version": {
+          "default": "1.0.0",
+          "title": "Version",
+          "type": "string"
+        },
+        "approval": {
+          "$ref": "#/$defs/Approval",
+          "default": "draft"
+        },
+        "stability": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Stability"
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "summary"
+      ],
+      "title": "CapabilityMeta",
+      "type": "object"
+    },
+    "Checkpoint": {
+      "description": "An assertion that the screen actually reached the expected state.\n\nA click that appears to succeed and a click that changed the screen are\ndifferent events. Without this, a failure surfaces four steps later as\nsomething incomprehensible.",
+      "properties": {
+        "kind": {
+          "enum": [
+            "text_present",
+            "text_absent",
+            "url_contains",
+            "node_present"
+          ],
+          "title": "Kind",
+          "type": "string"
+        },
+        "value": {
+          "title": "Value",
+          "type": "string"
+        },
+        "frame": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Frame"
+        },
+        "timeout_ms": {
+          "default": 8000,
+          "title": "Timeout Ms",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "kind",
+        "value"
+      ],
+      "title": "Checkpoint",
+      "type": "object"
+    },
+    "Descriptor": {
+      "description": "One rung of the locator ladder.\n\nOrdered by how much meaning each carries: a role with an accessible name is\nthe strongest evidence; raw geometry is the weakest and is policy-gated.",
+      "properties": {
+        "strategy": {
+          "enum": [
+            "role_name",
+            "role_anchor",
+            "text",
+            "ordinal",
+            "coords"
+          ],
+          "title": "Strategy",
+          "type": "string"
+        },
+        "role": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Role"
+        },
+        "name": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Name"
+        },
+        "name_param": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Name Param"
+        },
+        "name_match": {
+          "default": "normalized",
+          "enum": [
+            "exact",
+            "normalized",
+            "contains"
+          ],
+          "title": "Name Match",
+          "type": "string"
+        },
+        "anchor": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Anchor"
+        },
+        "frame": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Frame"
+        },
+        "ordinal": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Ordinal"
+        }
+      },
+      "required": [
+        "strategy"
+      ],
+      "title": "Descriptor",
+      "type": "object"
+    },
+    "Extraction": {
+      "description": "How replay reads one value off the screen.\n\n``anchor_cell`` is the workhorse on legacy tables: find the cell whose text\nis the label, take the cell beside it. That relationship survives restyling\nand reordering in a way a positional read never does.",
+      "properties": {
+        "method": {
+          "enum": [
+            "anchor_cell",
+            "regex",
+            "node_text"
+          ],
+          "title": "Method",
+          "type": "string"
+        },
+        "anchor": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Anchor"
+        },
+        "frame": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Frame"
+        },
+        "pattern": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Pattern"
+        },
+        "group": {
+          "default": 1,
+          "title": "Group",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "method"
+      ],
+      "title": "Extraction",
+      "type": "object"
+    },
+    "OutcomeKind": {
+      "description": "The distinction the brief calls the most common design mistake here.",
+      "enum": [
+        "business",
+        "recoverable",
+        "fatal"
+      ],
+      "title": "OutcomeKind",
+      "type": "string"
+    },
+    "OutcomeSpec": {
+      "description": "A declared non-success result, with how to detect it -- and for a\nrecoverable one, what to actually do about it.\n\n\"Recoverable\" is not a single behaviour: an unexpected interstitial is\ndismissed, an expired session is re-authenticated, a transient stall is\nwaited out. Collapsing them into \"retry\" would leave the first two\nlooping until the budget runs out.",
+      "properties": {
+        "code": {
+          "title": "Code",
+          "type": "string"
+        },
+        "kind": {
+          "$ref": "#/$defs/OutcomeKind"
+        },
+        "detector": {
+          "$ref": "#/$defs/Checkpoint"
+        },
+        "message": {
+          "default": "",
+          "title": "Message",
+          "type": "string"
+        },
+        "expectation": {
+          "default": "",
+          "title": "Expectation",
+          "type": "string"
+        },
+        "recovery": {
+          "default": "retry",
+          "enum": [
+            "retry",
+            "dismiss",
+            "reauth"
+          ],
+          "title": "Recovery",
+          "type": "string"
+        },
+        "recovery_target": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Recovery Target"
+        },
+        "max_attempts": {
+          "default": 1,
+          "title": "Max Attempts",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "code",
+        "kind",
+        "detector"
+      ],
+      "title": "OutcomeSpec",
+      "type": "object"
+    },
+    "OutputSpec": {
+      "properties": {
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "type": {
+          "default": "string",
+          "enum": [
+            "string",
+            "number",
+            "integer",
+            "boolean",
+            "date"
+          ],
+          "title": "Type",
+          "type": "string"
+        },
+        "description": {
+          "default": "",
+          "title": "Description",
+          "type": "string"
+        },
+        "sensitivity": {
+          "$ref": "#/$defs/Sensitivity",
+          "default": "internal"
+        },
+        "extracted_at_step": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Extracted At Step"
+        },
+        "extract": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Extraction"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        }
+      },
+      "required": [
+        "name"
+      ],
+      "title": "OutputSpec",
+      "type": "object"
+    },
+    "ParamSpec": {
+      "properties": {
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "type": {
+          "default": "string",
+          "enum": [
+            "string",
+            "number",
+            "integer",
+            "boolean",
+            "date"
+          ],
+          "title": "Type",
+          "type": "string"
+        },
+        "required": {
+          "default": true,
+          "title": "Required",
+          "type": "boolean"
+        },
+        "pattern": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Pattern"
+        },
+        "description": {
+          "default": "",
+          "title": "Description",
+          "type": "string"
+        },
+        "sensitivity": {
+          "$ref": "#/$defs/Sensitivity",
+          "default": "internal"
+        },
+        "example": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Example"
+        }
+      },
+      "required": [
+        "name"
+      ],
+      "title": "ParamSpec",
+      "type": "object"
+    },
+    "Provenance": {
+      "properties": {
+        "discovered_by_model": {
+          "title": "Discovered By Model",
+          "type": "string"
+        },
+        "run_id": {
+          "title": "Run Id",
+          "type": "string"
+        },
+        "created_at": {
+          "title": "Created At",
+          "type": "string"
+        },
+        "recorded_on_tenant": {
+          "title": "Recorded On Tenant",
+          "type": "string"
+        },
+        "evidence_ref": {
+          "title": "Evidence Ref",
+          "type": "string"
+        },
+        "request_ids": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Request Ids",
+          "type": "array"
+        },
+        "model_calls": {
+          "default": 0,
+          "title": "Model Calls",
+          "type": "integer"
+        },
+        "tokens_in": {
+          "default": 0,
+          "title": "Tokens In",
+          "type": "integer"
+        },
+        "tokens_out": {
+          "default": 0,
+          "title": "Tokens Out",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "discovered_by_model",
+        "run_id",
+        "created_at",
+        "recorded_on_tenant",
+        "evidence_ref"
+      ],
+      "title": "Provenance",
+      "type": "object"
+    },
+    "Risk": {
+      "description": "What a step could do if it goes wrong. Decides who is allowed to run it.",
+      "enum": [
+        "read",
+        "reversible",
+        "mutating",
+        "irreversible",
+        "credential"
+      ],
+      "title": "Risk",
+      "type": "string"
+    },
+    "Sensitivity": {
+      "description": "Drives redaction. Anything above `internal` never reaches disk.",
+      "enum": [
+        "public",
+        "internal",
+        "pii",
+        "secret"
+      ],
+      "title": "Sensitivity",
+      "type": "string"
+    },
+    "Step": {
+      "properties": {
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "intent": {
+          "title": "Intent",
+          "type": "string"
+        },
+        "action": {
+          "$ref": "#/$defs/Action"
+        },
+        "target": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Target"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "precondition": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Checkpoint"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "postcondition": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Checkpoint"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "risk": {
+          "$ref": "#/$defs/Risk",
+          "default": "read"
+        },
+        "timeout_ms": {
+          "default": 10000,
+          "title": "Timeout Ms",
+          "type": "integer"
+        },
+        "on_error": {
+          "items": {
+            "type": "string"
+          },
+          "title": "On Error",
+          "type": "array"
+        },
+        "on_unresolved": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "On Unresolved"
+        }
+      },
+      "required": [
+        "id",
+        "intent",
+        "action"
+      ],
+      "title": "Step",
+      "type": "object"
+    },
+    "Target": {
+      "properties": {
+        "primary": {
+          "$ref": "#/$defs/Descriptor"
+        },
+        "fallbacks": {
+          "items": {
+            "$ref": "#/$defs/Descriptor"
+          },
+          "title": "Fallbacks",
+          "type": "array"
+        },
+        "min_confidence": {
+          "default": 0.8,
+          "title": "Min Confidence",
+          "type": "number"
+        }
+      },
+      "required": [
+        "primary"
+      ],
+      "title": "Target",
+      "type": "object"
+    }
+  },
+  "properties": {
+    "schema_version": {
+      "default": "1.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "capability": {
+      "$ref": "#/$defs/CapabilityMeta"
+    },
+    "app": {
+      "$ref": "#/$defs/AppProfile"
+    },
+    "inputs": {
+      "items": {
+        "$ref": "#/$defs/ParamSpec"
+      },
+      "title": "Inputs",
+      "type": "array"
+    },
+    "outputs": {
+      "items": {
+        "$ref": "#/$defs/OutputSpec"
+      },
+      "title": "Outputs",
+      "type": "array"
+    },
+    "steps": {
+      "items": {
+        "$ref": "#/$defs/Step"
+      },
+      "title": "Steps",
+      "type": "array"
+    },
+    "outcomes": {
+      "items": {
+        "$ref": "#/$defs/OutcomeSpec"
+      },
+      "title": "Outcomes",
+      "type": "array"
+    },
+    "success": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/Checkpoint"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "provenance": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/Provenance"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    }
+  },
+  "required": [
+    "capability",
+    "app"
+  ],
+  "title": "CapabilityArtifact",
+  "type": "object"
+}

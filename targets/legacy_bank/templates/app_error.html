@@ -1,0 +1,36 @@
+<html>
+<head>
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='legacy.css') }}">
+</head>
+<body bgcolor="#ffffff" topmargin="0" leftmargin="0" marginwidth="0" marginheight="0">
+
+<!--
+  The app's own error surface. Note it answers HTTP 200 with a rendered page,
+  which is how most legacy server-rendered apps report business conditions.
+  Nothing at the transport layer signals a problem, so detection has to be
+  based on what is on the screen.
+-->
+<table width="100%" cellpadding="0" cellspacing="0" border="0" class="t1">
+<tr><td height="14"></td></tr>
+<tr>
+<td>
+  <table width="96%" cellpadding="10" cellspacing="0" border="0" align="center" bgcolor="#fdf0ef" class="t3">
+  <tr>
+    <td class="c9">
+      <font face="Arial" size="3" color="#96231a"><b>{{ heading }}</b></font><br><br>
+      <font face="Arial" size="2" color="#3a3a3a">{{ message }}</font>
+    </td>
+  </tr>
+  </table>
+</td>
+</tr>
+<tr><td height="14"></td></tr>
+<tr>
+  <td>
+    &nbsp;&nbsp;<font face="Arial" size="2"><a href="overview.htm" class="a2">Return to {{ t.title_overview }}</a></font>
+  </td>
+</tr>
+</table>
+
+</body>
+</html>

@@ -1,0 +1,40 @@
+<html>
+<head>
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='legacy.css') }}">
+</head>
+<body bgcolor="#eeeeee" topmargin="0" leftmargin="0" marginwidth="0" marginheight="0">
+
+<table width="100%" cellpadding="0" cellspacing="0" border="0" class="t1">
+<tr>
+  <td bgcolor="{{ t.accent }}" height="40">
+    &nbsp;<font face="Arial" size="2" color="#ffffff"><b>{{ t.wordmark }}</b></font>
+  </td>
+</tr>
+<tr><td height="8"></td></tr>
+
+<tr>
+  <td class="c5">
+    &nbsp;<font face="Arial" size="1" color="#666666"><b>SERVICING</b></font>
+  </td>
+</tr>
+<tr><td height="4"></td></tr>
+
+<tr>
+  <td class="c6">
+    &nbsp;<a href="overview.htm" target="{{ t.frame_content }}" class="a1">{{ t.nav_overview }}</a>
+  </td>
+</tr>
+<tr>
+  <td class="c6">
+    &nbsp;<a href="transfer.htm" target="{{ t.frame_content }}" class="a1">{{ t.nav_transfer }}</a>
+  </td>
+</tr>
+<tr>
+  <td class="c6">
+    &nbsp;<a href="logout.htm" target="_top" class="a1">Log Out</a>
+  </td>
+</tr>
+</table>
+
+</body>
+</html>

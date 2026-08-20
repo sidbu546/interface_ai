@@ -1,0 +1,53 @@
+<html>
+<head>
+  <title>{{ t.institution }}</title>
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='legacy.css') }}">
+</head>
+<body bgcolor="#ffffff">
+
+<!--
+  Tenant-specific interstitial. Meridian does not have this screen at all.
+  A flow recorded against Meridian meets an unexpected page here, which is
+  the single most common way a shared artifact breaks across institutions --
+  and the reason a TenantBinding can insert steps as well as override them.
+-->
+<table width="100%" cellpadding="0" cellspacing="0" border="0" class="t1">
+<tr>
+  <td bgcolor="{{ t.accent }}" height="46">
+    &nbsp;<font face="Arial" size="4" color="#ffffff"><b>{{ t.wordmark }}</b></font>
+  </td>
+</tr>
+<tr><td height="3" bgcolor="#c8c8c8"></td></tr>
+</table>
+
+<table width="100%" cellpadding="0" cellspacing="0" border="0">
+<tr>
+<td align="center" valign="top">
+  <table width="520" cellpadding="0" cellspacing="0" border="0">
+  <tr><td height="30"></td></tr>
+  <tr>
+    <td>
+      <font face="Arial" size="3" color="{{ t.accent }}"><b>{{ t.interstitial_heading }}</b></font>
+    </td>
+  </tr>
+  <tr><td height="10"></td></tr>
+  <tr>
+    <td>
+      <font face="Arial" size="2" color="#3a3a3a">{{ t.interstitial_body }}</font>
+    </td>
+  </tr>
+  <tr><td height="18"></td></tr>
+  <tr>
+    <td>
+      <form method="post" action="notice.htm">
+        <input type="submit" value="{{ t.interstitial_button }}" class="b1">
+      </form>
+    </td>
+  </tr>
+  </table>
+</td>
+</tr>
+</table>
+
+</body>
+</html>

@@ -1,0 +1,17 @@
+<html>
+<head>
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='legacy.css') }}">
+</head>
+<body bgcolor="#dddddd" topmargin="0" leftmargin="0" marginwidth="0" marginheight="0">
+<table width="100%" cellpadding="2" cellspacing="0" border="0" class="t1">
+<tr>
+  <td class="c7">
+    &nbsp;<font face="Arial" size="1">Signed on as {{ customer.display_name }} ({{ customer.username }})</font>
+  </td>
+  <td align="right" class="c7">
+    <font face="Arial" size="1">{{ t.institution }} &middot; Core Servicing {{ t.product_version }}</font>&nbsp;
+  </td>
+</tr>
+</table>
+</body>
+</html>

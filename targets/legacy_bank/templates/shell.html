@@ -1,0 +1,20 @@
+<html>
+<head>
+  <title>{{ t.institution }} - Core Servicing</title>
+</head>
+<!--
+  Nested frameset. The content the automation cares about lives two levels
+  down, in a frame whose NAME differs per tenant. Any locator scoped by frame
+  name is therefore tenant-specific and belongs in the binding, not the flow.
+-->
+<frameset rows="*,26" frameborder="1" border="1" framespacing="0">
+  <frameset cols="196,*" frameborder="1" border="1" framespacing="0">
+    <frame src="nav.htm" name="{{ t.frame_nav }}" scrolling="auto" marginwidth="0" marginheight="0">
+    <frame src="overview.htm" name="{{ t.frame_content }}" scrolling="auto" marginwidth="0" marginheight="0">
+  </frameset>
+  <frame src="status.htm" name="{{ t.frame_status }}" scrolling="no" noresize marginwidth="0" marginheight="0">
+</frameset>
+<noframes>
+<body>This application requires a browser that supports frames.</body>
+</noframes>
+</html>

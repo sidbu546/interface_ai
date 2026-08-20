@@ -1,0 +1,18 @@
+# Target application -- the hostile bank app the system drives (targets/).
+flask>=3.0
+
+# Capability artifact schema: typed, validated, JSON-Schema-exportable.
+pydantic>=2.6
+
+# Surface driver. Chromium is fetched separately:  playwright install chromium
+playwright>=1.40
+
+# Discovery only. Replay never imports this -- see the note in README.
+anthropic>=0.40
+
+# Agent-facing capability catalog served over HTTP (understudy/api.py).
+fastapi>=0.110
+uvicorn>=0.27
+
+# Test suite
+pytest>=8.0

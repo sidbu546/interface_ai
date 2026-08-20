@@ -1,0 +1,167 @@
+{
+  "status": "business_outcome",
+  "outcome_code": "insufficient_funds",
+  "step": "s9_continue_to_confirmation_screen",
+  "reason": "The source account does not have enough available balance.",
+  "expected": "the source account to hold at least the requested amount (during 'Continue to confirmation screen')",
+  "observed": "the application said: 'Insufficient available funds for this transfer.' | detector 'insufficient_funds' matched | url=http://127.0.0.1:8099/meridian/main.htm | title='Meridian Credit Union - Core Servicing' | screen text: Transfer Funds / Insufficient available funds for this transfer. / Amount: / $ / From Account #: / 13344 (CHECKING) / To Account #: / Continue / 13566 (SAVINGS) / 13901 (MONEY MARKET)",
+  "url": "http://127.0.0.1:8099/meridian/main.htm",
+  "frame_urls": [
+    "http://127.0.0.1:8099/meridian/main.htm",
+    "http://127.0.0.1:8099/meridian/nav.htm",
+    "http://127.0.0.1:8099/meridian/transfer_confirm.htm",
+    "http://127.0.0.1:8099/meridian/status.htm"
+  ],
+  "nodes": [
+    {
+      "role": "LayoutTableCell",
+      "name": "MERIDIAN CU",
+      "frame": "navframe"
+    },
+    {
+      "role": "LayoutTableCell",
+      "name": "SERVICING",
+      "frame": "navframe"
+    },
+    {
+      "role": "LayoutTableCell",
+      "name": "Accounts Overview",
+      "frame": "navframe"
+    },
+    {
+      "role": "LayoutTableCell",
+      "name": "Transfer Funds",
+      "frame": "navframe"
+    },
+    {
+      "role": "LayoutTableCell",
+      "name": "Log Out",
+      "frame": "navframe"
+    },
+    {
+      "role": "link",
+      "name": "Accounts Overview",
+      "frame": "navframe"
+    },
+    {
+      "role": "link",
+      "name": "Transfer Funds",
+      "frame": "navframe"
+    },
+    {
+      "role": "link",
+      "name": "Log Out",
+      "frame": "navframe"
+    },
+    {
+      "role": "LayoutTableCell",
+      "name": "Transfer Funds",
+      "frame": "contentframe"
+    },
+    {
+      "role": "LayoutTableCell",
+      "name": "Insufficient available funds for this transfer.",
+      "frame": "contentframe"
+    },
+    {
+      "role": "LayoutTableCell",
+      "name": "Insufficient available funds for this transfer.",
+      "frame": "contentframe"
+    },
+    {
+      "role": "LayoutTableCell",
+      "name": "Amount:",
+      "frame": "contentframe"
+    },
+    {
+      "role": "LayoutTableCell",
+      "name": "$",
+      "frame": "contentframe"
+    },
+    {
+      "role": "LayoutTableCell",
+      "name": "From Account #:",
+      "frame": "contentframe"
+    },
+    {
+      "role": "LayoutTableCell",
+      "name": "13344 (CHECKING)",
+      "frame": "contentframe"
+    },
+    {
+      "role": "LayoutTableCell",
+      "name": "To Account #:",
+      "frame": "contentframe"
+    },
+    {
+      "role": "LayoutTableCell",
+      "name": "13344 (CHECKING)",
+      "frame": "contentframe"
+    },
+    {
+      "role": "LayoutTableCell",
+      "name": "Continue",
+      "frame": "contentframe"
+    },
+    {
+      "role": "textbox",
+      "name": "",
+      "frame": "contentframe"
+    },
+    {
+      "role": "combobox",
+      "name": "",
+      "frame": "contentframe"
+    },
+    {
+      "role": "combobox",
+      "name": "",
+      "frame": "contentframe"
+    },
+    {
+      "role": "button",
+      "name": "Continue",
+      "frame": "contentframe"
+    },
+    {
+      "role": "option",
+      "name": "13344 (CHECKING)",
+      "frame": "contentframe"
+    },
+    {
+      "role": "option",
+      "name": "13566 (SAVINGS)",
+      "frame": "contentframe"
+    },
+    {
+      "role": "option",
+      "name": "13901 (MONEY MARKET)",
+      "frame": "contentframe"
+    },
+    {
+      "role": "option",
+      "name": "13344 (CHECKING)",
+      "frame": "contentframe"
+    },
+    {
+      "role": "option",
+      "name": "13566 (SAVINGS)",
+      "frame": "contentframe"
+    },
+    {
+      "role": "option",
+      "name": "13901 (MONEY MARKET)",
+      "frame": "contentframe"
+    },
+    {
+      "role": "LayoutTableCell",
+      "name": "Signed on as Jordan Smith (jsmith)",
+      "frame": "statusframe"
+    },
+    {
+      "role": "LayoutTableCell",
+      "name": "Meridian Credit Union \u00b7 Core Servicing 8.2.1",
+      "frame": "statusframe"
+    }
+  ]
+}

@@ -1,0 +1,37 @@
+<html>
+<head>
+  <title>Legacy Bank Target</title>
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='legacy.css') }}">
+</head>
+<body bgcolor="#ffffff">
+<!-- Developer landing page. Not part of any recorded flow. -->
+<table width="620" cellpadding="0" cellspacing="0" border="0" align="center">
+<tr><td height="30"></td></tr>
+<tr>
+  <td><font face="Arial" size="4"><b>Legacy Bank &mdash; automation target</b></font></td>
+</tr>
+<tr><td height="8"></td></tr>
+<tr>
+  <td>
+    <font face="Arial" size="2" color="#555555">
+      Two institutions running the same vendor product, configured differently.
+      Test data only. Sign in with <b>jsmith</b> / <b>demo1234</b>.
+    </font>
+  </td>
+</tr>
+<tr><td height="18"></td></tr>
+{% for t in tenants %}
+<tr>
+  <td>
+    <font face="Arial" size="2">
+      <a href="/{{ t.slug }}/index.htm" class="a2">{{ t.institution }}</a>
+      &nbsp;<font color="#888888">&middot; Core Servicing {{ t.product_version }}
+      {%- if t.interstitial %} &middot; has post-login interstitial{% endif %}</font>
+    </font>
+  </td>
+</tr>
+<tr><td height="6"></td></tr>
+{% endfor %}
+</table>
+</body>
+</html>

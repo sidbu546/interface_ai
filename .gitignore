@@ -1,0 +1,11 @@
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+venv/
+evidence/**/*.zip
+.env
+
+# Evidence screenshots ARE committed -- the README references them and the
+# brief asks for a richer signal on failure. Only bulky traces are excluded.
+evidence/**/*.trace

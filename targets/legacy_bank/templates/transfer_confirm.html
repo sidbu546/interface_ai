@@ -1,0 +1,87 @@
+<html>
+<head>
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='legacy.css') }}">
+</head>
+<body bgcolor="#ffffff" topmargin="0" leftmargin="0" marginwidth="0" marginheight="0">
+
+<table width="100%" cellpadding="0" cellspacing="0" border="0" class="t1">
+<tr><td height="10"></td></tr>
+<tr>
+  <td>
+    &nbsp;&nbsp;<font face="Arial" size="3" color="{{ t.accent }}"><b>Confirm Transfer</b></font>
+  </td>
+</tr>
+<tr><td height="10"></td></tr>
+
+<tr>
+  <td>
+    &nbsp;&nbsp;<font face="Arial" size="2">
+      Please review the details below. This transfer cannot be reversed once submitted.
+    </font>
+  </td>
+</tr>
+<tr><td height="12"></td></tr>
+
+<tr>
+<td>
+  <table width="96%" cellpadding="0" cellspacing="0" border="0" align="center">
+  <tr>
+  <td>
+    <table width="100%" cellpadding="5" cellspacing="1" border="0" bgcolor="#b9b9b9" class="t6">
+    <tr bgcolor="#ffffff">
+      <td width="30%" class="c1"><font face="Arial" size="2"><b>Amount</b></font></td>
+      <td class="c2"><font face="Arial" size="2">${{ '%.2f'|format(amount) }}</font></td>
+    </tr>
+    <tr bgcolor="#ffffff">
+      <td class="c1"><font face="Arial" size="2"><b>From {{ t.col_account }}</b></font></td>
+      <td class="c2"><font face="Arial" size="2">{{ from_id }}</font></td>
+    </tr>
+    <tr bgcolor="#ffffff">
+      <td class="c1"><font face="Arial" size="2"><b>To {{ t.col_account }}</b></font></td>
+      <td class="c2"><font face="Arial" size="2">{{ to_id }}</font></td>
+    </tr>
+    </table>
+  </td>
+  </tr>
+  </table>
+</td>
+</tr>
+
+<tr><td height="16"></td></tr>
+
+<tr>
+<td>
+  <form method="post" action="transfer_exec.htm" name="xferform">
+    <input type="hidden" name="fromAccount" value="{{ from_id }}">
+    <input type="hidden" name="toAccount" value="{{ to_id }}">
+    <input type="hidden" name="amount" value="{{ '%.2f'|format(amount) }}">
+
+    <table width="96%" cellpadding="0" cellspacing="0" border="0" align="center">
+    <tr>
+      <td>
+        <!--
+          Deliberate: the control that commits an irreversible financial
+          action is a styled <div> with an onclick handler, not a <button>
+          or <input type=submit>. Its accessibility role is generic, so
+          role-based location fails and the locator ladder has to fall
+          through to text plus container. Legacy enterprise apps are full
+          of these.
+        -->
+        <div class="fakebtn" onclick="document.xferform.submit();">Submit Transfer</div>
+      </td>
+    </tr>
+    </table>
+  </form>
+</td>
+</tr>
+
+<tr><td height="14"></td></tr>
+<tr>
+  <td>
+    &nbsp;&nbsp;<font face="Arial" size="2"><a href="transfer.htm" class="a2">Cancel</a></font>
+  </td>
+</tr>
+</table>
+
+</body>
+</html>

@@ -1,0 +1,665 @@
+{
+  "schema_version": "1.0",
+  "capability": {
+    "id": "meridian.transfer.execute",
+    "name": "Meridian Transfer Execute",
+    "summary": "Log in. Open savings account 13566 and note its current balance. Then open Transfer Funds, enter an amount of 25, set the From account to checking 13344 and the To account to savings 13566, and continue to the confirmation screen. Ask the operator to press Submit Transfer. After they hand control back, re-open savings account 13566 and report its updated balance",
+    "version": "1.2.0",
+    "approval": "draft"
+  },
+  "app": {
+    "product": "meridian-core",
+    "version_range": "*",
+    "surface_kind": "legacy_web"
+  },
+  "inputs": [
+    {
+      "name": "account_id",
+      "type": "integer",
+      "required": true,
+      "description": "identifies which record this capability opens",
+      "sensitivity": "pii",
+      "example": "13566"
+    },
+    {
+      "name": "amount",
+      "type": "number",
+      "required": true,
+      "description": "value for $",
+      "sensitivity": "internal",
+      "example": "25"
+    },
+    {
+      "name": "from_account",
+      "type": "string",
+      "required": true,
+      "description": "value for From Account #:",
+      "sensitivity": "pii",
+      "example": "13344 (CHECKING)"
+    },
+    {
+      "name": "to_account",
+      "type": "string",
+      "required": true,
+      "description": "value for To Account #:",
+      "sensitivity": "pii",
+      "example": "13566 (SAVINGS)"
+    }
+  ],
+  "outputs": [
+    {
+      "name": "account",
+      "type": "string",
+      "description": "observed on the recorded run as: 13566 (SAVINGS)",
+      "sensitivity": "pii",
+      "extracted_at_step": "s8_set_to_account_to_savings_13566",
+      "extract": {
+        "method": "anchor_cell",
+        "anchor": "To Account #:",
+        "frame": "contentframe",
+        "group": 1
+      }
+    },
+    {
+      "name": "balance_before",
+      "type": "number",
+      "description": "observed on the recorded run as: $4820.55",
+      "sensitivity": "internal",
+      "extracted_at_step": "s4_open_savings_account_13566_detail",
+      "extract": {
+        "method": "anchor_cell",
+        "anchor": "Balance",
+        "frame": "contentframe",
+        "group": 1
+      }
+    },
+    {
+      "name": "transfer_amount",
+      "type": "number",
+      "description": "observed on the recorded run as: $25.00",
+      "sensitivity": "internal",
+      "extracted_at_step": "s9_continue_to_confirmation_screen",
+      "extract": {
+        "method": "anchor_cell",
+        "anchor": "Amount",
+        "frame": "contentframe",
+        "group": 1
+      }
+    },
+    {
+      "name": "balance_after",
+      "type": "number",
+      "description": "observed on the recorded run as: $4845.55",
+      "sensitivity": "internal",
+      "extracted_at_step": "s12_re_open_savings_13566_to_confirm_u",
+      "extract": {
+        "method": "anchor_cell",
+        "anchor": "Balance",
+        "frame": "contentframe",
+        "group": 1
+      }
+    },
+    {
+      "name": "available_after",
+      "type": "number",
+      "description": "observed on the recorded run as: $4845.55",
+      "sensitivity": "internal",
+      "extracted_at_step": "s12_re_open_savings_13566_to_confirm_u",
+      "extract": {
+        "method": "anchor_cell",
+        "anchor": "Available",
+        "frame": "contentframe",
+        "group": 1
+      }
+    },
+    {
+      "name": "checking_13344_balance_after",
+      "type": "number",
+      "description": "observed on the recorded run as: $1225.00",
+      "sensitivity": "internal",
+      "extracted_at_step": "s11_return_to_accounts_overview",
+      "extract": {
+        "method": "anchor_cell",
+        "anchor": "CHECKING",
+        "frame": "contentframe",
+        "group": 1
+      }
+    }
+  ],
+  "steps": [
+    {
+      "id": "s1_navigate",
+      "intent": "open the application entry point",
+      "action": {
+        "kind": "navigate",
+        "url": "http://127.0.0.1:8099/meridian/index.htm",
+        "submit_form": false
+      },
+      "postcondition": {
+        "kind": "url_contains",
+        "value": "index.htm",
+        "timeout_ms": 8000
+      },
+      "risk": "read",
+      "timeout_ms": 10000,
+      "on_error": [
+        "wait_retry",
+        "escalate"
+      ]
+    },
+    {
+      "id": "s2_enter_username",
+      "intent": "Enter username",
+      "action": {
+        "kind": "type_secret",
+        "secret_ref": "username",
+        "submit_form": false
+      },
+      "target": {
+        "primary": {
+          "strategy": "role_anchor",
+          "role": "textbox",
+          "name_match": "normalized",
+          "anchor": "Username:"
+        },
+        "fallbacks": [],
+        "min_confidence": 0.8
+      },
+      "risk": "credential",
+      "timeout_ms": 10000,
+      "on_error": [
+        "wait_retry",
+        "escalate"
+      ]
+    },
+    {
+      "id": "s3_enter_password",
+      "intent": "Enter password",
+      "action": {
+        "kind": "type_secret",
+        "secret_ref": "password",
+        "submit_form": true
+      },
+      "target": {
+        "primary": {
+          "strategy": "role_anchor",
+          "role": "textbox",
+          "name_match": "normalized",
+          "anchor": "Password:"
+        },
+        "fallbacks": [],
+        "min_confidence": 0.8
+      },
+      "postcondition": {
+        "kind": "text_absent",
+        "value": "Online Servicing Sign On",
+        "timeout_ms": 12000
+      },
+      "risk": "credential",
+      "timeout_ms": 10000,
+      "on_error": [
+        "wait_retry",
+        "escalate"
+      ]
+    },
+    {
+      "id": "s4_open_savings_account_13566_detail",
+      "intent": "Open savings account 13566 detail",
+      "action": {
+        "kind": "click",
+        "submit_form": false
+      },
+      "target": {
+        "primary": {
+          "strategy": "role_name",
+          "role": "link",
+          "name": "13566",
+          "name_param": "account_id",
+          "name_match": "normalized",
+          "frame": "contentframe"
+        },
+        "fallbacks": [
+          {
+            "strategy": "text",
+            "name": "13566",
+            "name_param": "account_id",
+            "name_match": "normalized"
+          }
+        ],
+        "min_confidence": 0.8
+      },
+      "risk": "read",
+      "timeout_ms": 10000,
+      "on_error": [
+        "wait_retry",
+        "escalate"
+      ],
+      "on_unresolved": "record_not_available"
+    },
+    {
+      "id": "s5_open_transfer_funds",
+      "intent": "Open Transfer Funds",
+      "action": {
+        "kind": "click",
+        "submit_form": false
+      },
+      "target": {
+        "primary": {
+          "strategy": "role_name",
+          "role": "link",
+          "name": "Transfer Funds",
+          "name_match": "normalized",
+          "frame": "navframe"
+        },
+        "fallbacks": [
+          {
+            "strategy": "text",
+            "name": "Transfer Funds",
+            "name_match": "normalized"
+          }
+        ],
+        "min_confidence": 0.8
+      },
+      "risk": "read",
+      "timeout_ms": 10000,
+      "on_error": [
+        "wait_retry",
+        "escalate"
+      ]
+    },
+    {
+      "id": "s6_enter_transfer_amount_25",
+      "intent": "Enter transfer amount 25",
+      "action": {
+        "kind": "type",
+        "param": "amount",
+        "submit_form": false
+      },
+      "target": {
+        "primary": {
+          "strategy": "role_anchor",
+          "role": "textbox",
+          "name_match": "normalized",
+          "anchor": "$",
+          "frame": "contentframe"
+        },
+        "fallbacks": [],
+        "min_confidence": 0.8
+      },
+      "risk": "reversible",
+      "timeout_ms": 10000,
+      "on_error": [
+        "wait_retry",
+        "escalate"
+      ]
+    },
+    {
+      "id": "s7_set_from_account_to_checking_13344",
+      "intent": "Set From account to checking 13344",
+      "action": {
+        "kind": "select",
+        "param": "from_account",
+        "submit_form": false
+      },
+      "target": {
+        "primary": {
+          "strategy": "role_anchor",
+          "role": "combobox",
+          "name_match": "normalized",
+          "anchor": "From Account #:",
+          "frame": "contentframe"
+        },
+        "fallbacks": [],
+        "min_confidence": 0.8
+      },
+      "risk": "reversible",
+      "timeout_ms": 10000,
+      "on_error": [
+        "wait_retry",
+        "escalate"
+      ]
+    },
+    {
+      "id": "s8_set_to_account_to_savings_13566",
+      "intent": "Set To account to savings 13566",
+      "action": {
+        "kind": "select",
+        "param": "to_account",
+        "submit_form": false
+      },
+      "target": {
+        "primary": {
+          "strategy": "role_anchor",
+          "role": "combobox",
+          "name_match": "normalized",
+          "anchor": "To Account #:",
+          "frame": "contentframe"
+        },
+        "fallbacks": [],
+        "min_confidence": 0.8
+      },
+      "risk": "reversible",
+      "timeout_ms": 10000,
+      "on_error": [
+        "wait_retry",
+        "escalate"
+      ]
+    },
+    {
+      "id": "s9_continue_to_confirmation_screen",
+      "intent": "Continue to confirmation screen",
+      "action": {
+        "kind": "click",
+        "submit_form": false
+      },
+      "target": {
+        "primary": {
+          "strategy": "role_name",
+          "role": "button",
+          "name": "Continue",
+          "name_match": "normalized",
+          "frame": "contentframe"
+        },
+        "fallbacks": [
+          {
+            "strategy": "text",
+            "name": "Continue",
+            "name_match": "normalized"
+          }
+        ],
+        "min_confidence": 0.8
+      },
+      "risk": "mutating",
+      "timeout_ms": 10000,
+      "on_error": [
+        "wait_retry",
+        "escalate"
+      ]
+    },
+    {
+      "id": "s10_request_human_step",
+      "intent": "request_human step",
+      "action": {
+        "kind": "human_action",
+        "submit_form": false,
+        "instruction": "On the \"Confirm Transfer\" screen (Amount $25.00, From 13344, To 13566), press the \"Submit Transfer\" button, then hand control back."
+      },
+      "risk": "irreversible",
+      "timeout_ms": 10000,
+      "on_error": [
+        "wait_retry",
+        "escalate"
+      ]
+    },
+    {
+      "id": "s11_return_to_accounts_overview",
+      "intent": "Return to Accounts Overview",
+      "action": {
+        "kind": "click",
+        "submit_form": false
+      },
+      "target": {
+        "primary": {
+          "strategy": "role_name",
+          "role": "link",
+          "name": "Return to Accounts Overview",
+          "name_match": "normalized",
+          "frame": "contentframe"
+        },
+        "fallbacks": [
+          {
+            "strategy": "text",
+            "name": "Return to Accounts Overview",
+            "name_match": "normalized"
+          }
+        ],
+        "min_confidence": 0.8
+      },
+      "risk": "read",
+      "timeout_ms": 10000,
+      "on_error": [
+        "wait_retry",
+        "escalate"
+      ]
+    },
+    {
+      "id": "s12_re_open_savings_13566_to_confirm_u",
+      "intent": "Re-open savings 13566 to confirm updated balance",
+      "action": {
+        "kind": "click",
+        "submit_form": false
+      },
+      "target": {
+        "primary": {
+          "strategy": "role_name",
+          "role": "link",
+          "name": "13566",
+          "name_param": "account_id",
+          "name_match": "normalized",
+          "frame": "contentframe"
+        },
+        "fallbacks": [
+          {
+            "strategy": "text",
+            "name": "13566",
+            "name_param": "account_id",
+            "name_match": "normalized"
+          }
+        ],
+        "min_confidence": 0.8
+      },
+      "postcondition": {
+        "kind": "text_present",
+        "value": "Account Detail",
+        "frame": "contentframe",
+        "timeout_ms": 12000
+      },
+      "risk": "read",
+      "timeout_ms": 10000,
+      "on_error": [
+        "wait_retry",
+        "escalate"
+      ],
+      "on_unresolved": "record_not_available"
+    }
+  ],
+  "outcomes": [
+    {
+      "code": "record_not_available",
+      "kind": "business",
+      "detector": {
+        "kind": "text_present",
+        "value": "__step_level__",
+        "timeout_ms": 8000
+      },
+      "message": "No such record is listed for the signed-in operator: it does not exist, or they are not entitled to see it.",
+      "expectation": "the requested record to be listed for the signed-in operator",
+      "recovery": "retry",
+      "max_attempts": 1
+    },
+    {
+      "code": "account_not_found",
+      "kind": "business",
+      "detector": {
+        "kind": "text_present",
+        "value": "Account Not Found",
+        "timeout_ms": 8000
+      },
+      "message": "No account matching the supplied id exists.",
+      "expectation": "the supplied account id to match an existing account",
+      "recovery": "retry",
+      "max_attempts": 1
+    },
+    {
+      "code": "access_denied",
+      "kind": "business",
+      "detector": {
+        "kind": "text_present",
+        "value": "Access Denied",
+        "timeout_ms": 8000
+      },
+      "message": "The signed-in operator may not view this account.",
+      "expectation": "the account to belong to the signed-in customer, so it could be opened",
+      "recovery": "retry",
+      "max_attempts": 1
+    },
+    {
+      "code": "no_transactions",
+      "kind": "business",
+      "detector": {
+        "kind": "text_present",
+        "value": "No transactions have posted",
+        "timeout_ms": 8000
+      },
+      "message": "The account exists but has no posted activity.",
+      "expectation": "the account to have at least one posted transaction",
+      "recovery": "retry",
+      "max_attempts": 1
+    },
+    {
+      "code": "validation_error",
+      "kind": "business",
+      "detector": {
+        "kind": "text_present",
+        "value": "Please enter a valid amount",
+        "timeout_ms": 8000
+      },
+      "message": "Wrong amount: the application would not accept the value supplied for the transfer. No transfer was staged.",
+      "expectation": "the supplied amount to be a positive number the application would accept",
+      "recovery": "retry",
+      "max_attempts": 1
+    },
+    {
+      "code": "invalid_account_selection",
+      "kind": "business",
+      "detector": {
+        "kind": "text_present",
+        "value": "source and destination accounts must be different",
+        "timeout_ms": 8000
+      },
+      "message": "The source and destination accounts must not be the same.",
+      "expectation": "the source and destination accounts to be two different accounts",
+      "recovery": "retry",
+      "max_attempts": 1
+    },
+    {
+      "code": "insufficient_funds",
+      "kind": "business",
+      "detector": {
+        "kind": "text_present",
+        "value": "Insufficient available funds",
+        "timeout_ms": 8000
+      },
+      "message": "The source account does not have enough available balance.",
+      "expectation": "the source account to hold at least the requested amount",
+      "recovery": "retry",
+      "max_attempts": 1
+    },
+    {
+      "code": "unexpected_interstitial",
+      "kind": "recoverable",
+      "detector": {
+        "kind": "text_present",
+        "value": "Security Notice",
+        "timeout_ms": 8000
+      },
+      "message": "An unexpected notice appeared; acknowledge it and continue.",
+      "expectation": "the next screen to appear without an intervening notice",
+      "recovery": "dismiss",
+      "recovery_target": "Acknowledge",
+      "max_attempts": 2
+    },
+    {
+      "code": "app_server_error",
+      "kind": "fatal",
+      "detector": {
+        "kind": "text_present",
+        "value": "Internal Server Error",
+        "timeout_ms": 8000
+      },
+      "message": "The application returned a server error.",
+      "expectation": "the application to serve the page rather than an error",
+      "recovery": "retry",
+      "max_attempts": 1
+    },
+    {
+      "code": "session_expired",
+      "kind": "recoverable",
+      "detector": {
+        "kind": "text_present",
+        "value": "session has ended due to inactivity",
+        "timeout_ms": 8000
+      },
+      "message": "Re-authenticate and resume at the current step.",
+      "expectation": "the signed-in session to still be active",
+      "recovery": "reauth",
+      "max_attempts": 2
+    },
+    {
+      "code": "wrong_password",
+      "kind": "business",
+      "detector": {
+        "kind": "text_present",
+        "value": "password entered for that username is not correct",
+        "timeout_ms": 8000
+      },
+      "message": "Wrong password: the username is a real account, but the password typed at the pause does not match it. Nothing was retried -- repeating a rejected password risks a lockout.",
+      "expectation": "the password entered at the pause to match the username that was entered with it",
+      "recovery": "retry",
+      "max_attempts": 1
+    },
+    {
+      "code": "unknown_username",
+      "kind": "business",
+      "detector": {
+        "kind": "text_present",
+        "value": "username was not recognised",
+        "timeout_ms": 8000
+      },
+      "message": "Unknown username: no account by that name exists at this institution, so the password was never the problem. Check the username before trying again.",
+      "expectation": "the username entered at the pause to be an account this institution recognises",
+      "recovery": "retry",
+      "max_attempts": 1
+    },
+    {
+      "code": "login_rejected",
+      "kind": "business",
+      "detector": {
+        "kind": "text_present",
+        "value": "could not be verified",
+        "timeout_ms": 8000
+      },
+      "message": "Wrong credentials: the username or password entered at the pause was not accepted, so no sign-in happened. Nothing was retried -- repeating a rejected credential risks a lockout.",
+      "expectation": "the username and password entered at the pause to be accepted and the session to reach the signed-in screen",
+      "recovery": "retry",
+      "max_attempts": 1
+    }
+  ],
+  "success": {
+    "kind": "text_present",
+    "value": "Account Detail",
+    "frame": "contentframe",
+    "timeout_ms": 10000
+  },
+  "provenance": {
+    "discovered_by_model": "claude-opus-5",
+    "run_id": "discovery-20260819-173231",
+    "created_at": "2026-08-20T01:25:28Z",
+    "recorded_on_tenant": "meridian",
+    "evidence_ref": "evidence/discovery-20260819-173231",
+    "request_ids": [
+      "req_011CeD4Pg2g3WbeYduL8oXTr",
+      "req_011CeD4QVa9mWADGno9tcwqU",
+      "req_011CeD4QoEHgcX5ia3vMc37x",
+      "req_011CeD4R69XhrQdvJJ6JMvLe",
+      "req_011CeD4RX1kQk8YbJgqTEuYB",
+      "req_011CeD4Rs2X3dbTkuYiAosq6",
+      "req_011CeD4SQ5ZVz57pieifon7L",
+      "req_011CeD4Si72QsFw1DA6TQDKo",
+      "req_011CeD4T4Jx3y7nZ7JfQzYWZ"
+    ],
+    "model_calls": 9,
+    "tokens_in": 124428,
+    "tokens_out": 1357
+  }
+}

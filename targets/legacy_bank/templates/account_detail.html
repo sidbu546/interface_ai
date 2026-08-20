@@ -1,0 +1,108 @@
+<html>
+<head>
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='legacy.css') }}">
+</head>
+<body bgcolor="#ffffff" topmargin="0" leftmargin="0" marginwidth="0" marginheight="0">
+
+<table width="100%" cellpadding="0" cellspacing="0" border="0" class="t1">
+<tr><td height="10"></td></tr>
+<tr>
+  <td>
+    &nbsp;&nbsp;<font face="Arial" size="3" color="{{ t.accent }}"><b>Account Detail</b></font>
+  </td>
+</tr>
+<tr><td height="10"></td></tr>
+
+<tr>
+<td>
+  <table width="96%" cellpadding="0" cellspacing="0" border="0" align="center">
+  <tr>
+  <td>
+    <!--
+      Label/value pairs as adjacent table cells. No <dl>, no <label>, no ids.
+      Reading "the balance" means finding the cell to the right of the cell
+      whose text is "{{ t.col_balance }}" -- a table-structural anchor, which
+      is exactly the third rung of the locator ladder.
+    -->
+    <table width="100%" cellpadding="5" cellspacing="1" border="0" bgcolor="#b9b9b9" class="t6">
+    <tr bgcolor="#ffffff">
+      <td width="30%" class="c1"><font face="Arial" size="2"><b>{{ t.col_account }}</b></font></td>
+      <td class="c2"><font face="Arial" size="2">{{ account.account_id }}</font></td>
+    </tr>
+    <tr bgcolor="#ffffff">
+      <td class="c1"><font face="Arial" size="2"><b>{{ t.col_type }}</b></font></td>
+      <td class="c2"><font face="Arial" size="2">{{ account.kind }}</font></td>
+    </tr>
+    <tr bgcolor="#ffffff">
+      <td class="c1"><font face="Arial" size="2"><b>{{ t.col_balance }}</b></font></td>
+      <td class="c2"><font face="Arial" size="2">${{ '%.2f'|format(account.balance) }}</font></td>
+    </tr>
+    <tr bgcolor="#ffffff">
+      <td class="c1"><font face="Arial" size="2"><b>{{ t.col_available }}</b></font></td>
+      <td class="c2"><font face="Arial" size="2">${{ '%.2f'|format(account.available) }}</font></td>
+    </tr>
+    </table>
+  </td>
+  </tr>
+  </table>
+</td>
+</tr>
+
+<tr><td height="18"></td></tr>
+<tr>
+  <td>
+    &nbsp;&nbsp;<font face="Arial" size="2" color="{{ t.accent }}"><b>Posted Activity</b></font>
+  </td>
+</tr>
+<tr><td height="6"></td></tr>
+
+<tr>
+<td>
+  <table width="96%" cellpadding="0" cellspacing="0" border="0" align="center">
+  <tr>
+  <td>
+    <table width="100%" cellpadding="5" cellspacing="1" border="0" bgcolor="#b9b9b9" class="t6">
+    <tr bgcolor="#e4e4e4">
+      <td width="18%" class="c1"><font face="Arial" size="2"><b>Date</b></font></td>
+      <td width="16%" class="c1"><font face="Arial" size="2"><b>Reference</b></font></td>
+      <td width="34%" class="c1"><font face="Arial" size="2"><b>Description</b></font></td>
+      <td width="10%" class="c1"><font face="Arial" size="2"><b>Type</b></font></td>
+      <td width="11%" align="right" class="c1"><font face="Arial" size="2"><b>Amount</b></font></td>
+      <td width="11%" align="right" class="c1"><font face="Arial" size="2"><b>Running</b></font></td>
+    </tr>
+    {% if transactions %}
+      {% for x in transactions %}
+      <tr bgcolor="#ffffff">
+        <td class="c2"><font face="Arial" size="2">{{ x.posted_on }}</font></td>
+        <td class="c2"><font face="Arial" size="2">{{ x.txn_id }}</font></td>
+        <td class="c2"><font face="Arial" size="2">{{ x.description }}</font></td>
+        <td class="c2"><font face="Arial" size="2">{{ x.kind }}</font></td>
+        <td align="right" class="c2"><font face="Arial" size="2">${{ '%.2f'|format(x.amount) }}</font></td>
+        <td align="right" class="c2"><font face="Arial" size="2">${{ '%.2f'|format(x.running_balance) }}</font></td>
+      </tr>
+      {% endfor %}
+    {% else %}
+      <!-- Business outcome: no_transactions. An empty result, not a failure. -->
+      <tr bgcolor="#ffffff">
+        <td colspan="6" align="center" class="c2">
+          <font face="Arial" size="2" color="#555555">No transactions have posted to this account.</font>
+        </td>
+      </tr>
+    {% endif %}
+    </table>
+  </td>
+  </tr>
+  </table>
+</td>
+</tr>
+
+<tr><td height="14"></td></tr>
+<tr>
+  <td>
+    &nbsp;&nbsp;<font face="Arial" size="2"><a href="overview.htm" class="a2">Return to {{ t.title_overview }}</a></font>
+  </td>
+</tr>
+</table>
+
+</body>
+</html>

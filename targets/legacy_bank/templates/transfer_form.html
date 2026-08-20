@@ -1,0 +1,76 @@
+<html>
+<head>
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='legacy.css') }}">
+</head>
+<body bgcolor="#ffffff" topmargin="0" leftmargin="0" marginwidth="0" marginheight="0">
+
+<table width="100%" cellpadding="0" cellspacing="0" border="0" class="t1">
+<tr><td height="10"></td></tr>
+<tr>
+  <td>
+    &nbsp;&nbsp;<font face="Arial" size="3" color="{{ t.accent }}"><b>{{ t.nav_transfer }}</b></font>
+  </td>
+</tr>
+<tr><td height="10"></td></tr>
+
+{% if error %}
+<tr>
+  <td>
+    <table width="96%" cellpadding="6" cellspacing="0" border="0" align="center" bgcolor="#fdf0ef" class="t3">
+    <tr>
+      <td class="c9">
+        <font face="Arial" size="2" color="#96231a"><b>{{ error }}</b></font>
+      </td>
+    </tr>
+    </table>
+  </td>
+</tr>
+<tr><td height="10"></td></tr>
+{% endif %}
+
+<tr>
+<td>
+  <form method="post" action="transfer_confirm.htm">
+  <table width="96%" cellpadding="5" cellspacing="0" border="0" align="center" class="t4">
+
+  <tr>
+    <td width="150" align="right" class="c2"><font face="Arial" size="2">Amount:</font></td>
+    <td class="c3">
+      $<input type="text" name="amount" size="12" class="i1">
+    </td>
+  </tr>
+  <tr>
+    <td align="right" class="c2"><font face="Arial" size="2">From {{ t.col_account }}:</font></td>
+    <td class="c3">
+      <select name="fromAccount" class="i2">
+        {% for a in accounts %}
+        <option value="{{ a.account_id }}">{{ a.account_id }} ({{ a.kind }})</option>
+        {% endfor %}
+      </select>
+    </td>
+  </tr>
+  <tr>
+    <td align="right" class="c2"><font face="Arial" size="2">To {{ t.col_account }}:</font></td>
+    <td class="c3">
+      <select name="toAccount" class="i2">
+        {% for a in accounts %}
+        <option value="{{ a.account_id }}">{{ a.account_id }} ({{ a.kind }})</option>
+        {% endfor %}
+      </select>
+    </td>
+  </tr>
+  <tr>
+    <td></td>
+    <td class="c3">
+      <input type="submit" value="Continue" class="b1">
+    </td>
+  </tr>
+  </table>
+  </form>
+</td>
+</tr>
+
+</table>
+
+</body>
+</html>

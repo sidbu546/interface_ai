@@ -520,12 +520,45 @@ geometry. The accessibility tree resolved every control in this target on rung
 0 — `fallback_rate` was 0% on every run in §3 — so building a geometric rung
 would have meant writing code no run could exercise.
 
-**`apply_binding()` does not exist.** `TenantBinding` validates, serialises, and
-has a test asserting it stays an overlay rather than a copy of the flow, but
-nothing produces one and replay cannot consume one. Of the five items here this
-is the weakest cut: a Cascade binding is roughly 500 bytes against an 18 KB
-artifact, touching 4 of 12 steps, and the target app already ships the drift it
-would absorb.
+**The second tenant was built and never driven.** Cascade exists in
+`tenants.py` as a full configuration of the same vendor product. It differs
+from Meridian in 23 configuration fields — branding, column headers and
+interstitial copy among them. The ten that matter for locating a control are
+these, chosen because they are what breaks naive replay:
+
+```
+label_username   'Username:'         ->  'Member ID:'
+label_password   'Password:'         ->  'PIN / Password:'
+label_signin     'Log In'            ->  'Sign On'
+nav_transfer     'Transfer Funds'    ->  'Move Money'
+nav_overview     'Accounts Overview' ->  'My Accounts'
+frame_nav        'navframe'          ->  'menu'
+frame_content    'contentframe'      ->  'body'
+frame_status     'statusframe'       ->  'footer'
+interstitial      False              ->  True      (a compliance screen mid-flow)
+product_version  '8.2.1'             ->  '8.2.4'
+```
+
+Four tests in `test_target_app.py` pin these down — the interstitial forcing a
+redirect, the relabelled columns, the renamed frames, and Cascade's refusal to
+say which half of a credential failed. `doctor.py` checks both tenants are
+serving. `compiler.py` even detects the tenant from the target URL and records
+it in provenance.
+
+What never happened: no discovery run was made against `/cascade/`, no Cascade
+artifact exists, and no replay has ever pointed at it. Every artifact, every
+evidence bundle, and every demo in this repository is Meridian. So the hardest
+part of the multi-tenant claim — that a Meridian-recorded flow can be *reused*
+rather than re-recorded — has a target built to test it and no test run against
+it.
+
+**`apply_binding()` does not exist either.** `TenantBinding` validates,
+serialises, and has a test asserting it stays an overlay rather than a copy of
+the flow, but nothing produces one and replay cannot consume one. Of everything
+here this is the weakest cut: a Cascade binding is roughly 500 bytes against an
+18 KB artifact and touches 4 of the 12 steps — the two credential steps for the
+relabelled fields, and the two nav clicks for `Move Money` and `My Accounts`.
+The other eight steps are unchanged, which is the entire hypothesis, unverified.
 
 **No concurrency anywhere.** One run, one browser, one process; evidence written
 to the filesystem. Every timing in §3 is a single-run measurement. Correctness
@@ -539,7 +572,13 @@ of one replay is the thing the rest would be built on top of.
    `provenance.recorded_on_tenant` already holds that fact separately. Fixing
    the naming is a compiler default and an id convention. It has to land before
    `apply_binding()`, because overlaying Cascade onto an artifact called
-   `meridian.*` would preserve the confusion instead of removing it.
+   `meridian.*` would preserve the confusion instead of removing it. The
+   demonstration that closes this is one command: replay the existing
+   Meridian-recorded artifact against `http://127.0.0.1:8099/cascade/` through a
+   binding, and show it completing — no discovery run, no model, no API key.
+   Cascade's mid-flow interstitial makes it a genuine test rather than a
+   relabelling exercise, since the binding has to insert a step the recorded
+   flow never had.
 
 2. **Make `approval` mean something.** `compile_run` prints a draft warning;
    `catalog.py` and `api.py` *report* the approval state in the tool

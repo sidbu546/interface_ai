@@ -1,7 +1,6 @@
 # Evidence
 
-Five retained runs. Each is the log of a command below — nothing here is a
-sample, a fixture, or a leftover from an abandoned attempt.
+Five retained runs. Each is the log of a command below.
 
 Read them in order: the discovery run that taught the capability, the replay
 that performs it, two replays where the application declined, and one where it

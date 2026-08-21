@@ -1,6 +1,6 @@
 # Evidence
 
-**[Watch the demo video for this evidence](https://drive.google.com/drive/search?dmr=1&ec=wgc-drive-%5Bmodule%5D-goto&q=demo)**
+**[Watch the demo video for this evidence](https://drive.google.com/file/d/1LT_ytfz1XR7PL8wJT_XPkdoWgbaD8j3Y/view?usp=sharing)**
 
 Five retained runs. Each is the log of a command below.
 

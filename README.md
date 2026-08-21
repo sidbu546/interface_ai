@@ -22,7 +22,6 @@ execution path.
 - [Demo path](#demo-path) — the exact commands
 - [System design](#system-design)
 - [What each file is for](#what-each-file-is-for)
-- [Design decisions worth defending](#design-decisions-worth-defending)
 - [Known limitations](#known-limitations)
 
 ---
@@ -356,7 +355,7 @@ neither discovery nor replay can route around it.
 **The artifact is the contract.** The tool definition an agent sees is *derived
 from the artifact*, so what is advertised cannot drift from what replay does.
 
-### How elements are identified (§3.2's "reasoning about robustness")
+### How elements are identified
 
 No CSS. No XPath. No element handles. A test asserts none ever appear in an
 artifact. Instead each step carries a **ranked ladder** of semantic descriptors:
@@ -378,7 +377,7 @@ Data is *parameterised*, not frozen: the recorded run clicked a link named
 `13566`, and the artifact stores `name_param: account_id`. Otherwise every
 replay would open exactly one account forever.
 
-### The result contract (§3.3)
+### The result contract
 
 | Tier | Meaning | What replay does | Exit |
 |---|---|---|---|
@@ -407,7 +406,7 @@ determined at s2_enter_username
             not correct.' | detector 'wrong_password' matched | url=...
 ```
 
-### Safety (§3.4)
+### Safety
 
 - **Allowlist** — origins *and* action kinds. `/_reset` is on `denied_paths`.
 - **Risk classes** on every step: `read`, `reversible`, `mutating`,
@@ -422,7 +421,7 @@ determined at s2_enter_username
   is **suspended** (`capture: "suspended"`) so a screenshot cannot catch a
   password mid-typing.
 
-### Human-in-the-loop (§3.6)
+### Human-in-the-loop
 
 One mechanism, two triggers: **credential entry** and **irreversible action**.
 Both pause the automation, hand you the *same live browser session* (not a fresh
@@ -477,39 +476,6 @@ extra interstitial — the real shape of multi-tenant drift.
 | `test_artifact.py` | 17 | schema, compilation, no selectors, no credentials, mid-flow extraction |
 | `test_replay.py` | 29 | resolution, ambiguity, recovery bounds, dismiss-without-repeat, outcome wording |
 | `test_handoff.py` | 7 | pause, control transfer, resume, capture suspension |
-
----
-
-## Design decisions worth defending
-
-**The accessibility tree, not the DOM.** The brief asks for an approach that
-still works when the surface has no clean DOM. Roles and accessible names are
-what a *desktop* automation API exposes too, so the same artifact shape extends
-to a surface with no DOM at all.
-
-**Ambiguity is an error.** Guessing between two matching controls is how a
-capability silently transfers money from the wrong account.
-
-**A business outcome is not a failure.** "No such member" is a legitimate
-result. Conflating it with a crash is the mistake the brief calls out, and it is
-why there are four statuses rather than two.
-
-**Recovery is bounded and per-condition.** Collapsing "dismiss the dialog",
-"sign in again", and "wait" into one generic retry leaves the first two spinning
-until the budget runs out.
-
-**Dismiss does not repeat the step.** An interstitial appearing *after* a step
-succeeded is dismissed and the run continues. Re-running the step there would be
-a double submission on a transfer.
-
-**Outputs are read where they were seen.** The pre-transfer balance lives on a
-screen that no longer exists at the end of the run. Every output records the
-step it was captured on, and replay keeps that screen. Reading everything off
-the final screen returns nothing for it — or worse, the post-transfer figure
-labelled "before".
-
-**Artifacts compile to `draft`.** Inference is good enough to be useful and not
-good enough to trust unattended.
 
 ---
 

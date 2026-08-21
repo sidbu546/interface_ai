@@ -162,9 +162,9 @@ automated attempts is a locked account. The engine treats these as answers to
 return, not conditions to recover from, which is why they exit 2 rather than 4.
 
 `outcome.png` for the funds case shows the app's own red banner above the
-transfer form. That matters more than the log line: in a regulated setting, "the
-application told us there were insufficient funds" is a claim someone will
-eventually want to see a picture of.
+transfer form. That matters more than the log line: the claim being made is
+about what the *application* said, and a screenshot is the only form of that
+claim an audit can check independently.
 
 ## `replay-failure-app-500/` — what a hard failure leaves behind
 

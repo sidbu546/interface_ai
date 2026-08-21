@@ -515,7 +515,7 @@ good enough to trust unattended.
 
 ## Known limitations
 
-Stated plainly rather than discovered by a reviewer.
+What this system does not do, or does incompletely.
 
 - **`approval: draft` is advisory.** `compile_run` warns; nothing enforces it.
   A draft artifact is still invocable through the catalog and the API. There is

@@ -200,8 +200,7 @@ re-clicked *through* a modal that was swallowing the click. Each condition
 declares its own `max_attempts` — both showed `attempt 1/2` — and exhausting it
 escalates to a human rather than looping.
 
-One subtlety worth stating: after a dismissal the run **continues**, it does not
-re-run the step. The notice appeared *after* `s8` had already succeeded.
+After a dismissal the run **continues**; it does not re-run the step. The notice appeared *after* `s8` had already succeeded.
 Repeating that step on a transfer flow is how you submit twice.
 
 **Business outcome — the run stops early and answers.** These are not errors.
@@ -331,8 +330,7 @@ but `Descriptor` carries no coordinates, `_matches()` never consults geometry,
 and there is no policy gate for it. `Surface.screenshot()` exists and is used
 for failure evidence, not for locating.
 
-The ladder's state is worth stating exactly: the top three rungs are derived by
-the compiler and resolved by replay; `ordinal` is resolved (it disambiguates
+The ladder's state, exactly: the top three rungs are derived by the compiler and resolved by replay; `ordinal` is resolved (it disambiguates
 when several candidates match) but never emitted by the compiler; `coords` is
 neither. So the honest limitation is larger than one missing surface: **only
 `WebSurface` exists, and the rung that a DOM-less surface would lean on hardest
@@ -359,9 +357,9 @@ named after the tenant the run happened on. Onboarding Cascade today would
 therefore produce a *separate* capability rather than a binding, which is
 exactly the outcome this design exists to avoid. It is a compiler default and an
 id convention, not a structural constraint: the fields that make product-keying
-possible already exist and nothing above them assumes otherwise. Worth naming
-plainly, though, because a reviewer opening an artifact sees the tenant's name
-where the product's should be.
+possible already exist and nothing above them assumes otherwise. Until it is
+changed, though, the artifacts on disk carry the tenant's name where the
+product's belongs.
 
 The overlay itself:
 
@@ -392,8 +390,8 @@ and inserts a compliance interstitial mid-flow.
   capability, writing `last_verified` and flipping `status`. Cheap, because
   replay is ~2 seconds and needs no model.
 
-**Honest status:** `TenantBinding` is modelled and unit-tested but never
-produced by the compiler or applied by replay, and no Cascade artifact exists.
+**Status:** `TenantBinding` is modelled and unit-tested but never produced by
+the compiler or applied by replay, and no Cascade artifact exists.
 The reuse story is a design claim backed by a schema, not a demonstration. The
 cheapest way to close it is `apply_binding(artifact, binding)` plus one replay
 of the Meridian artifact against Cascade — roughly 30 lines and no discovery run.
@@ -508,8 +506,9 @@ compiles, not that the abstraction is right.
 screenshot rung before it was needed would have been speculative.
 
 *Applying `TenantBinding` at replay.* The schema is designed; the application
-path is not written. This is the cut I am least comfortable with, because it
-leaves §3.7's second bullet as a claim.
+path is not written, which leaves multi-tenant reuse as a claim rather than a
+working path. Of everything cut, this is the one with the weakest justification
+— it is small, and the target app already models the drift it would absorb.
 
 *Parallelism, queueing, and a scheduler.* Single-run correctness first.
 

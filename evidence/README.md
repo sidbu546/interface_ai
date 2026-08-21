@@ -1,5 +1,7 @@
 # Evidence
 
+**[Watch the demo video for this evidence](https://drive.google.com/drive/search?dmr=1&ec=wgc-drive-%5Bmodule%5D-goto&q=demo)**
+
 Five retained runs. Each is the log of a command below.
 
 Read them in order: the discovery run that taught the capability, the replay

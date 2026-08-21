@@ -492,53 +492,100 @@ confidence floor, replay stops rather than acting on the best guess.
 
 ## 7. Cuts
 
-**Deliberately not built.**
+### What was left unbuilt, and what stands in its place
 
-*A co-browsing operator console.* Explicitly out of scope in the brief. The
-control-transfer model is the part worth getting right; a real browser window
-plus a terminal prompt is a legitimate minimal operator surface.
+**The operator surface is a terminal prompt.** Escalation routes through
+`_pause_for_human()` in `agent.py` and `_terminal_operator()` in
+`replay_run.py`: the run prints the step id, the reason, and what needs doing,
+then blocks on `input()` while the person works in the browser window that is
+already open. No queue, no console, no authentication of who picked it up. What
+that buys is the part that is hard to retrofit — control transfer on the *same*
+session, `capture: "suspended"` while a human types, and an
+`intervention_raised` / `intervention_resolved` pair in the journal recording
+who held control. A console is a front end onto that; the seam underneath it is
+what would have been expensive to get wrong.
 
-*A second surface implementation.* The seam is designed, enforced by tests, and
-demonstrated once. A stub desktop surface would have proven the interface
-compiles, not that the abstraction is right.
+**One surface implementation.** `WebSurface` is the only class implementing the
+`Surface` protocol. The engines are annotated against the protocol and touch no
+Playwright attribute, and seven plain-Python doubles in the test suite already
+drive the full replay engine without a browser — so the boundary is exercised,
+not merely declared. A stub desktop surface would have shown the protocol can be
+implemented twice, which is not the same as showing the vocabulary
+(`role · name · anchor · frame`) survives contact with UIA or AT-SPI.
 
-*Vision-assisted locating.* The AX tree carried this target completely. Adding a
-screenshot rung before it was needed would have been speculative.
+**The `coords` rung is a reserved slot.** It sits in the strategy enum scored
+0.45, below the 0.8 floor, so a descriptor using it would be refused rather than
+trusted. `Descriptor` carries no coordinates and `_matches()` never consults
+geometry. The accessibility tree resolved every control in this target on rung
+0 — `fallback_rate` was 0% on every run in §3 — so building a geometric rung
+would have meant writing code no run could exercise.
 
-*Applying `TenantBinding` at replay.* The schema is designed; the application
-path is not written, which leaves multi-tenant reuse as a claim rather than a
-working path. Of everything cut, this is the one with the weakest justification
-— it is small, and the target app already models the drift it would absorb.
+**`apply_binding()` does not exist.** `TenantBinding` validates, serialises, and
+has a test asserting it stays an overlay rather than a copy of the flow, but
+nothing produces one and replay cannot consume one. Of the five items here this
+is the weakest cut: a Cascade binding is roughly 500 bytes against an 18 KB
+artifact, touching 4 of 12 steps, and the target app already ships the drift it
+would absorb.
 
-*Parallelism, queueing, and a scheduler.* Single-run correctness first.
+**No concurrency anywhere.** One run, one browser, one process; evidence written
+to the filesystem. Every timing in §3 is a single-run measurement. Correctness
+of one replay is the thing the rest would be built on top of.
 
-**What I would build next, in order.**
+### Next, in order
 
-1. **Product-key the artifacts, then `apply_binding()` and a Cascade replay.**
-   The renaming comes first and is nearly free — `app.product` becomes the vendor
-   product and capability ids stop carrying a tenant's name — because binding
-   onto an artifact called `meridian.*` would encode the confusion rather than
-   fix it. With that done, `apply_binding()` plus one Cascade replay turns
-   multi-tenant reuse from a schema into a demonstration, needs no discovery run,
-   and the target app already models the drift.
-2. **Enforce approval.** Refuse unattended invocation of a `draft` artifact;
-   add a `review` command that shows a human exactly what was inferred —
-   parameter names, risk classes, detectors — and promotes to `approved`. This
-   is what makes "the artifact is a contract" true rather than aspirational.
-3. **Table-aware extraction (`row_cell`).** Several outputs are declared and
-   dropped because they sit in table rows with no safe anchor. The compiler
-   correctly refuses to guess; it should instead learn to express "the Amount
-   cell of the row whose Reference is X".
-4. **A canary scheduler.** Per-tenant read-only replay on a schedule, writing
-   `last_verified` and `fallback_rate` into each binding. Turns drift detection
-   from a number on a run into an operational signal.
-5. **Content-based redaction and evidence retention.** Required before this
-   touches real regulated data.
+1. **Key artifacts to the product, then bind.** `app.product` is
+   `"meridian-core"` and the capability id is `meridian.transfer.execute` —
+   both named after the tenant the recording happened on, while
+   `provenance.recorded_on_tenant` already holds that fact separately. Fixing
+   the naming is a compiler default and an id convention. It has to land before
+   `apply_binding()`, because overlaying Cascade onto an artifact called
+   `meridian.*` would preserve the confusion instead of removing it.
 
-**One thing I would reconsider entirely.** Discovery currently records what the
-model *did*, including incidental choices — on one run it set the From account
-explicitly, on another it left the screen default and the compiler produced a
-capability with one fewer parameter. Both are faithful recordings; only one is a
-good capability. A "rehearsal" pass — replay the fresh artifact immediately with
-perturbed inputs and require it to still succeed — would catch that class of
-latent fragility at compile time rather than in production.
+2. **Make `approval` mean something.** `compile_run` prints a draft warning;
+   `catalog.py` and `api.py` *report* the approval state in the tool
+   description, and neither checks it before invoking. So an artifact whose
+   parameter names, risk classes and outcome detectors were inferred by a model
+   and never reviewed is callable unattended, including one containing an
+   `irreversible` step. The work is a gate at `Catalog.invoke()` plus a `review`
+   command that prints what was inferred and promotes `draft` to `approved`.
+
+3. **Table-aware extraction.** The compiler derives an anchor from the
+   neighbouring cell and emits nothing when the only candidates repeat down a
+   column. On the read capability that costs three outputs — `type`,
+   `latest_transaction_amount`, `latest_transaction_description` — all of them
+   sitting in the Posted Activity table with column values, not labels, beside
+   them. The rule those need is positional within a row: *the Amount cell of the
+   row whose Reference is X*. Refusing to guess is right; a `row_cell` method
+   would let it stop refusing.
+
+4. **Turn `fallback_rate` into a signal.** It is computed on every result and
+   read by whoever happens to look. A scheduled read-only replay per tenant,
+   writing `last_verified` and `fallback_rate` back into each binding and
+   flipping `status` to `needs_review`, is what makes rung-0 drift visible
+   before a capability breaks rather than after.
+
+5. **Redaction by content, not by key.** `SECRET_KEYS` in `journal.py` matches
+   on argument names — `password`, `token`, `pin`, `secret`. It cannot see an
+   account number inside a screen dump or a customer name in an accessible name,
+   and evidence bundles are written unencrypted with no retention policy.
+   Sufficient for the credential path, insufficient for the data this would
+   really run against.
+
+### One thing to reconsider
+
+The compiler records what the model did, including choices it made for reasons
+that were not load-bearing. Two discovery runs against the same goal, minutes
+apart, produced different capabilities: one set the From account explicitly and
+compiled to 12 steps with a `from_account` parameter; the other saw the dropdown
+already showing `13344 (CHECKING)`, skipped the step, and compiled to 11 steps
+without that parameter. Both recordings are accurate. Only one produces a
+capability that still transfers from the right account if the app's default ever
+changes.
+
+Nothing in the pipeline can currently tell those apart, because both look like
+successful runs. A rehearsal pass would: immediately after compiling, replay the
+artifact with perturbed inputs and require it to still reach its success
+condition. The eleven-step version would have failed that check the moment the
+default moved, at compile time, instead of quietly transferring from whatever
+the screen happened to be showing.
+
